@@ -2,14 +2,27 @@
 <html>
     <head>
         <style>
-        a{
-            color:darkcyan;
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
+            font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
             font-weight:bold;
         }
         </style>
         <title>SGG Projects</title>
     </head>
-    <body>
+    <body style="background-color:#aae6ff">
         <h1>Custom SS</h1>
         <p>Custom SS is a screensaver program I made that displays custom screensavers! You can even make them yourself if you want!<br>
         A link to the installer can be found below.<br><br>

@@ -2,14 +2,27 @@
 <html>
     <head>
         <style>
-        a{
-            color:darkcyan;
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
+            font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
             font-weight:bold;
         }
         </style>
         <title>Messing Around - SGG Projects</title>
     </head>
-    <body>
+    <body style="background-color:#aae6ff">
         <h1>H1!!</h1>
         <h2>H2!</h2>
         <h3>H3.</h3>

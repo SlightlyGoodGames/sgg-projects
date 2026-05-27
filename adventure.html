@@ -2,17 +2,48 @@
 <html>
     <head>
         <style>
-        a{
-            color:darkcyan;
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
             font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
+            font-weight:bold;
+        }
+        button{
+            background-color:#5aa5b9;
+            outline-color:#3d889c;
         }
         </style>
         <title>Adventure - SGG Projects</title>
     </head>
-    <body>
+    <body style="background-color:#aae6ff" id="body">
         <h1>Adventure</h1>
         <p>Adventure is a text adventure game I made for fun!<br>It has quite a few features.<br>This link will install it for you!<br>
         <a href="setup.exe">Download Adventure installer here</a>
+        <br><br>
+        <!--<button onclick="setCyanProperty()">Cyan colour scheme</button><p>   </p>
+        <button onclick="setRedProperty()">Red colour scheme</button>-->
         <br><br>Bye!<br><br><br><a href="index.html">Go back to home page</a></p>
     </body>
+    <script>
+        function setCyanProperty(){
+            document.documentElement.style.setProperty("--col1","darkcyan")
+            document.documentElement.style.setProperty("--col2","#5aa5b9")
+            document.documentElement.style.setProperty("--col3","#3a5f3a")
+            document.getElementById("body").style.backgroundColor = "#71ffd8"
+        }
+        function setRedProperty(){
+            document.documentElement.style.setProperty("--col1","darkred")
+        }
+    </script>
 </html>

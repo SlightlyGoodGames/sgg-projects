@@ -5,7 +5,7 @@
         :root{
             --link: darkcyan;
             --linkhover: #5aa5b9;
-            --linkpress: #3a5f3a;
+            --linkpress: #5e453d;
         }
         a:link,a:visited{
             color:var(--link);
@@ -21,7 +21,9 @@
         }
         button{
             background-color:#5aa5b9;
-            outline-color:#3d889c;
+            outline-width:10px;
+            cursor:pointer;
+            border-color:#3d889c;
         }
         </style>
         <title>Adventure - SGG Projects</title>
@@ -31,19 +33,22 @@
         <p>Adventure is a text adventure game I made for fun!<br>It has quite a few features.<br>This link will install it for you!<br>
         <a href="setup.exe">Download Adventure installer here</a>
         <br><br>
-        <!--<button onclick="setCyanProperty()">Cyan colour scheme</button><p>   </p>
-        <button onclick="setRedProperty()">Red colour scheme</button>-->
+        <button onclick="setCyanTheme()">Cyan colour scheme</button><p>   </p>
+        <button onclick="setRedTheme()">Red colour scheme</button>
         <br><br>Bye!<br><br><br><a href="index.html">Go back to home page</a></p>
     </body>
     <script>
-        function setCyanProperty(){
-            document.documentElement.style.setProperty("--col1","darkcyan")
-            document.documentElement.style.setProperty("--col2","#5aa5b9")
-            document.documentElement.style.setProperty("--col3","#3a5f3a")
-            document.getElementById("body").style.backgroundColor = "#71ffd8"
+        function setCyanTheme(){
+            document.documentElement.style.setProperty("--link","darkcyan")
+            document.documentElement.style.setProperty("--linkhover","#5aa5b9")
+            document.documentElement.style.setProperty("--linkpress","#3a5f3a")
+            document.getElementById("body").style.backgroundColor = "#aae6ff"
         }
-        function setRedProperty(){
-            document.documentElement.style.setProperty("--col1","darkred")
+        function setRedTheme(){
+            document.documentElement.style.setProperty("--link","darkred")
+            document.documentElement.style.setProperty("--linkhover","#b95a5a")
+            document.documentElement.style.setProperty("--linkpress","#795144")
+            document.getElementById("body").style.backgroundColor = "#ffaaaa"
         }
     </script>
 </html>

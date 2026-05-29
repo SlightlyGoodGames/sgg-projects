@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        body{
+            background:#aae6ff;
+            transition:background-color 0.5s;
+        }
+        button{
+            background-color:#5aa5b9;
+            cursor:pointer;
+            border-color:#3d889c;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="startfake">
+        <h1>Fake Crash</h1>
+        <p>This page will display a fake error message. I made it for reasons including:<br>- Learning sound playing<br>- Learning JS animation<br>etc. Hope you like it!</p>
+        <button onclick="startFake()">Start fake error</button>
+        </div>
+        <p id="notrespond" style="display:none;">Your browser is not responding.<br>Please restart your browser to continue using the internet.<br><br><a href="index.html">Go to home</a></p>
+        <script>
+            let error = new Audio("windows98.mp3")
+            function lighten(){
+                document.body.style.backgroundColor = "#dcf4ff"
+            }
+            function sayNotResponsive(){
+                document.getElementById("notrespond").style.display = "block"
+            }
+            function playError(){
+                error.play()
+            }
+            function startFake(){
+                setTimeout(lighten,5000);
+                setTimeout(playError,9500)
+                setTimeout(sayNotResponsive,10000)
+                document.getElementById("startfake").style.display = "none"
+                document.documentElement.style.cursor = "wait"
+            }
+        </script>
+    </body>
+</html>

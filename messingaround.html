@@ -53,10 +53,12 @@
             let getTo;
             let wins = 0;
             let losses = 0;
+            let gameover = false;
             function start(){
                 document.getElementById("win").style.display = "none";
                 document.getElementById("loss").style.display = "none";
                 document.getElementById("counter").innerHTML = "Current number: 1";
+                gameover = false;
                 currentThing = 1;
                 addOrMult = Math.random();
                 if (addOrMult < 0.5){
@@ -80,10 +82,13 @@
                     document.getElementById("win").style.display = "block";
                     document.getElementById("winbutton").style.display = "block";
                 } else if (currentThing > getTo){
-                    document.getElementById("loss").style.display = "block";
-                    document.getElementById("win").style.display = "none";
-                    losses += 1;
-                    document.getElementById("showlosses").innerHTML = "Losses: "+losses;
+                    if (!gameover){
+                        gameover = true;
+                        document.getElementById("loss").style.display = "block";
+                        document.getElementById("win").style.display = "none";
+                        losses += 1;
+                        document.getElementById("showlosses").innerHTML = "Losses: "+losses;
+                    }
                 }
                 document.getElementById("counter").innerHTML = "Current number: "+currentThing.toLocaleString();
             }

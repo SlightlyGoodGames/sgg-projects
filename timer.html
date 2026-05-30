@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html style="background-color:#aae6ff" class="centre">
+    <head>
+        <style>
+        @font-face{
+            font-family:'PixelHomeVideo';
+            src: url("customfonts/pixel-homevideo.ttf");
+        }
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
+            font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
+            font-weight:bold;
+        }
+        .button{
+            background-color:#5aa5b9;
+            cursor:pointer;
+            border-color:#3d889c;
+        }
+        .centre{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        body{
+            font-family:'PixelHomeVideo';
+            font-size:100px;
+        }
+        html{
+            cursor:none;
+        }
+        </style>
+        <title>Timer - SGG Projects</title>
+    </head>
+    <body>
+        <center><p style="font-size:50px" id="type"></p></center>
+        <p id="time"></p>
+        <center><p style="font-size:50px" id="entertime">Enter a time</p></center>
+        <script>
+            document.onkeydown = handlekeys;
+            let startTime = Date.now()
+            let isTimer = false;
+            let timerEnded = false;
+            let timerStart = 0;
+            let entering = false;
+            let currentTime = "000000";
+            function handlekeys(key){
+                if (key.keyCode == 37 || key.keyCode == 39){
+                    isTimer = !isTimer;
+                    entering = false;
+                    timerEnded = false;
+                    document.getElementById("time").style.color = "black";
+                    begin();
+                } else if (entering && (key.keyCode >= 48 && key.keyCode <= 57)){
+                    let numberPressed = key.keyCode-48;
+                    currentTime = currentTime.substring(1,currentTime.length)+numberPressed;
+                    document.getElementById("time").innerHTML = currentTime.charAt(0)+currentTime.charAt(1)+":"+currentTime.charAt(2)+currentTime.charAt(3)+":"+currentTime.charAt(4)+currentTime.charAt(5);
+                } else if (entering && key.keyCode == 13){
+                    entering = false;
+                    document.getElementById("entertime").style.display = "none";
+                    timerStart = 3600000*parseInt(currentTime.substring(0,2))+60000*parseInt(currentTime.substring(2,4))+1000*parseInt(currentTime.substring(4,6));
+                    startTime = Date.now();
+                } else if (key.keyCode == 32){
+                    if(!entering){
+                        startTime = Date.now();
+                    }
+                }
+            }
+            function update(){
+                let elapsed = 0;
+                let totalSeconds = 0;
+                if (isTimer){
+                    elapsed = -(Date.now()-startTime)+timerStart;
+                    totalSeconds = Math.ceil(elapsed / 1000);
+                    if (totalSeconds == 0){
+                        timerEnded = true;
+                    }
+                } else {
+                    elapsed = Date.now()-startTime;
+                    totalSeconds = Math.floor(elapsed / 1000);
+                }
+                let seconds = totalSeconds % 60;
+                let minutes = Math.floor(totalSeconds / 60) % 60;
+                let hours = Math.floor(totalSeconds / 3600);
+                document.getElementById("time").innerHTML = String(hours).padStart(2, "0") + ":" +String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+            }
+            async function begin(){
+                if(isTimer){document.getElementById("type").innerHTML = "Timer";document.getElementById("entertime").style.display = "block";currentTime="000000";document.getElementById("time").innerHTML = "00:00:00";}else{document.getElementById("type").innerHTML = "Stopwatch";document.getElementById("entertime").style.display = "none";}
+                if(isTimer){
+                    entering = true;
+                }
+                startTime = Date.now();
+            }
+            async function loop(){
+                while(true){
+                    if(!entering){
+                        if (!timerEnded){
+                            update();
+                        } else {
+                            if (document.getElementById("time").style.color == "red"){
+                                document.getElementById("time").style.color = "black";
+                            } else {
+                                document.getElementById("time").style.color = "red";
+                            }
+                            await new Promise(r => setTimeout(r,990));
+                        }
+                    }
+                    await new Promise(r => setTimeout(r,10));
+                }
+            }
+            begin();
+            loop();
+        </script>
+    </body>
+</html>

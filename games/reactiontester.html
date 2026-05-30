@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html style="background-color:#aae6ff">
+    <head>
+        <style>
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
+            font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
+            font-weight:bold;
+        }
+        .button{
+            background-color:#5aa5b9;
+            cursor:pointer;
+            border-color:#3d889c;
+        }
+        </style>
+        <title>Reaction Tester - SGG Projects</title>
+    </head>
+    <body>
+        <div id="beforestart">
+        <p>Reaction tester -- click the button to start and again when the page goes green!<br>The average human visual reaction time is 200-250 milliseconds.</p>
+        <button class="button" id="startbutton" onclick="startgame()">Start the game!</button>
+        </div>
+        <button class="button" id="clickbutton" onclick="clickbutton()" style="display:none;">Click when it's green!</button>
+        <p id="youtook"></p>
+        <p id="yourbest"></p>
+        <script>
+            let isgreen;
+            let starttime;
+            let timeoutid;
+            let yourbest = Infinity;
+            function startgame(){
+                document.documentElement.style.backgroundColor = "#ff0000";
+                document.getElementById("beforestart").style.display = "none";
+                document.getElementById("clickbutton").style.display = "block";
+                document.getElementById("youtook").innerHTML = "";
+                document.getElementById("yourbest").style.display = "none";
+                isgreen = false;
+                randomgreen();
+            }
+            function randomgreen(){
+                timeoutid = setTimeout(gogreen,Math.random()*1000+1000);
+            }
+            function gogreen(){
+                starttime = Date.now();
+                document.documentElement.style.backgroundColor = "#00ff00";
+                isgreen = true;
+            }
+            function clickbutton(){
+                if(isgreen){
+                    let timetaken = Date.now()-starttime;
+                    document.documentElement.style.backgroundColor = "#aae6ff";
+                    let speedrating;
+                    if (timetaken < 50){
+                        speedrating = "(Definitely AI.)"
+                    } else if (timetaken < 100){
+                        speedrating = "(INCREDIBLE!!)"
+                    } else if (timetaken < 150){
+                        speedrating = "(Superhuman!)"
+                    } else if (timetaken < 200){
+                        speedrating = "(Insane!)"
+                    } else if (timetaken < 225){
+                        speedrating = "(Awesome!)"
+                    } else if (timetaken < 250){
+                        speedrating = "(Good!)"
+                    } else if (timetaken < 300){
+                        speedrating = "(OK)"
+                    } else if (timetaken < 375){
+                        speedrating = "(Not very good)"
+                    } else if (timetaken < 500){
+                        speedrating = "(Slow...)"
+                    } else if (timetaken < 1000){
+                        speedrating = "(You need to click the button...)"
+                    } else if (timetaken < 2500){
+                        speedrating = "(Hello? Anyone there?)"
+                    } else if (timetaken < 5000){
+                        speedrating = "(Are you just trying to get all of these messages?)"
+                    } else if (timetaken < 30000){
+                        speedrating = "(Tick, tock, tick, tock...)"
+                    } else {
+                        speedrating = "(Wow...)"
+                    }
+                    document.getElementById("youtook").innerHTML = "You took "+timetaken+" milliseconds! "+speedrating;
+                    document.getElementById("beforestart").style.display = "block";
+                    document.getElementById("clickbutton").style.display = "none";
+                    document.getElementById("yourbest").style.display = "block";
+                    if (timetaken < yourbest || yourbest == Infinity){
+                        yourbest = timetaken;
+                        document.getElementById("yourbest").innerHTML = "Your best time: "+yourbest+" milliseconds!"
+                    }
+                } else {
+                    clearTimeout(timeoutid);
+                    document.documentElement.style.backgroundColor = "#aae6ff";
+                    document.getElementById("youtook").innerHTML = "You clicked too early!";
+                    document.getElementById("beforestart").style.display = "block";
+                    document.getElementById("clickbutton").style.display = "none";
+                    document.getElementById("yourbest").style.display = "block";
+                }
+            }
+        </script>
+    </body>
+</html>

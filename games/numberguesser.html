@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        :root{
+            --link: darkcyan;
+            --linkhover: #5aa5b9;
+            --linkpress: #3a5f3a;
+        }
+        a:link,a:visited{
+            color:var(--link);
+            font-weight:bold;
+        }
+        a:hover{
+            color:var(--linkhover);
+            font-weight:bold;
+        }
+        a:active{
+            color:var(--linkpress);
+            font-weight:bold;
+        }
+        .button{
+            background-color:#5aa5b9;
+            cursor:pointer;
+            border-color:#3d889c;
+        }
+        </style>
+        <title>Number Guesser - SGG Projects</title>
+    </head>
+    <body style="background-color:#aae6ff">
+        <p>Guess a number from 1 to 100!</p>
+        <label for="numinput">Enter number: </label>
+        <input id="numinput" name="numinput" type="number">
+        <input type="submit" class="button" onclick="checknum()">
+        <p id="higherlower"></p>
+        <button id="restartbutton" class="button" onclick="start()">Restart</button>
+        <script>
+            let numtoget;
+            function start(){
+                document.getElementById("restartbutton").style.display = "none";
+                document.getElementById("higherlower").innerHTML = "";
+                numtoget = Math.round(1+Math.random()*99);
+            }
+            function checknum(){
+                let enterednum = document.getElementById("numinput").value;
+                if (enterednum < numtoget){
+                    document.getElementById("higherlower").innerHTML = "Your number is lower than the number to get.";
+                } else if (enterednum > numtoget){
+                    document.getElementById("higherlower").innerHTML = "Your number is higher than the number to get.";
+                } else if (enterednum == numtoget){
+                    document.getElementById("higherlower").innerHTML = "Your number is exactly correct.";
+                    document.getElementById("restartbutton").style.display = "block";
+                }
+                document.getElementById("numinput").value = "";
+            }
+            start()
+        </script>
+    </body>
+</html>

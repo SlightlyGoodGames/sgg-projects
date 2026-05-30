@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
     <head>
         <style>
@@ -19,21 +19,80 @@
             color:var(--linkpress);
             font-weight:bold;
         }
+        button{
+            background-color:#5aa5b9;
+            cursor:pointer;
+            border-color:#3d889c;
+        }
         </style>
-        <title>Messing Around - SGG Projects</title>
+        <title>A Cool Game - SGG Projects</title>
     </head>
     <body style="background-color:#aae6ff">
-        <h1>H1!!</h1>
-        <h2>H2!</h2>
-        <h3>H3.</h3>
-        <h4>H4</h4>
-        <h5>H5..</h5>
-        <h6>H6...</h6>
-        <p>Hello there!</p>
-        <script>
-            print("Wow!\nThis is JS btw...")
-            print("I forgot what to put here.\nBye.")
-        </script>
+        <div id="game">
+            <button onclick="increment()" id="button"></button>
+            <p id="counter"></p>
+            <p id="togetto"></p>
+        </div>
+        <br><br><br>
+        <p id="showwins">Wins: 0</p>
+        <p id="showlosses">Losses: 0</p>
+        <div id="win">
+            <p>You win!!</p>
+            <button id="winbutton" onclick="win()">Press this to win</button>
+        </div>
+        <div id="loss">
+            <p>Oh no!<br>You went too far!</p>
+        </div>
+        <button onclick="start()">Restart</button>
         <p><br><br><br><br><br><br><a href="index.html">Home page</a></p>
+        <script>
+            let currentThing;
+            let addOrMult;
+            let add;
+            let mult;
+            let getTo;
+            let wins = 0;
+            let losses = 0;
+            function start(){
+                document.getElementById("win").style.display = "none";
+                document.getElementById("loss").style.display = "none";
+                document.getElementById("counter").innerHTML = "Current number: 1";
+                currentThing = 1;
+                addOrMult = Math.random();
+                if (addOrMult < 0.5){
+                    add = Math.round(Math.random()*9+1);
+                    getTo = 1+(1+Math.round(Math.random()*10))*add;
+                    document.getElementById("button").innerHTML = "Add "+add;
+                } else {
+                    mult = Math.round(Math.random()*9+1);
+                    getTo = mult**(Math.round(Math.random()*10));
+                    document.getElementById("button").innerHTML = "Multiply by "+mult;
+                }
+                document.getElementById("togetto").innerHTML = "End: "+getTo.toLocaleString();
+            }
+            function increment(){
+                if (addOrMult < 0.5){
+                    currentThing += add;
+                } else {
+                    currentThing *= mult;
+                }
+                if (currentThing == getTo){
+                    document.getElementById("win").style.display = "block";
+                    document.getElementById("winbutton").style.display = "block";
+                } else if (currentThing > getTo){
+                    document.getElementById("loss").style.display = "block";
+                    document.getElementById("win").style.display = "none";
+                    losses += 1;
+                    document.getElementById("showlosses").innerHTML = "Losses: "+losses;
+                }
+                document.getElementById("counter").innerHTML = "Current number: "+currentThing.toLocaleString();
+            }
+            function win(){
+                wins += 1;
+                document.getElementById("showwins").innerHTML = "Wins: "+wins;
+                document.getElementById("winbutton").style.display = "none";
+            }
+            start();
+        </script>
     </body>
 </html>

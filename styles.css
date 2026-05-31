@@ -1,0 +1,28 @@
+:root{
+    --link: darkcyan;
+    --linkhover: #5aa5b9;
+    --linkpress: #3a5f3a;
+}
+a:link,a:visited{
+    color:var(--link);
+    font-weight:bold;
+}
+a:hover{
+    color:var(--linkhover);
+    font-weight:bold;
+}
+a:active{
+    color:var(--linkpress);
+    font-weight:bold;
+}
+.button{
+    background-color:#5aa5b9;
+    cursor:pointer;
+    border-color:#3d889c;
+}
+.centre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}

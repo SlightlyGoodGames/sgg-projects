@@ -16,11 +16,56 @@
         <center>
         <h2>Stuff goes here</h2>
         <p>I do not know why I made this.</p>
-        <button onclick="something()" class="button">Do something</button>
-        <p id="invis" style="display:none;">Well done</p></center>
+        <button onclick="something()" class="button">Reveal more</button>
+        <p id="invis" style="display:none;">Well done</p>
+        <p id="invis2" style="display:none;">OK</p>
+        <p id="invis3" style="display:none;">Hmm, I don't think there's any more.</p>
+        <p id="invis4" style="display:none;">I stand corrected.</p>
+        <p id="invis5" style="display:none;">Thanks for making it this far, I suppose?</p>
+        <p id="invis6" style="display:none;">Really, you can stop now.</p>
+        <p id="**Hey, you! Yeah, you. Imagine using inspect. That's crazy. You are quite gullible.**" style="display:none;">Try using the "inspect" tool on this message!</p>
+        <p id="lol" style="display:none;">Did I get you?</p>
+        <p id="invis355" style="display:none;">OK I am running out of ID names so bye.</p>
+        <p id="invis3453" style="display:none;">jk</p></center>
         <script>
+            let progress = 0;
             function something(){
-                document.getElementById("invis").style.display = "block";
+                switch(progress){
+                    case 0:
+                        show("invis");
+                        break
+                    case 1:
+                        show("invis2");
+                        break
+                    case 2:
+                        show("invis3");
+                        break
+                    case 3:
+                        show("invis4");
+                        break
+                    case 4:
+                        show("invis5");
+                        break
+                    case 5:
+                        show("invis6");
+                        break
+                    case 6:
+                        show("**Hey, you! Yeah, you. Imagine using inspect. That's crazy. You are quite gullible.**");
+                        break
+                    case 7:
+                        show("lol");
+                        break
+                    case 8:
+                        show("invis355");
+                        break
+                    case 9:
+                        show("invis3453");
+                        break
+                }
+                progress++;
+            }
+            function show(id){
+                document.getElementById(id).style.display = "block";
             }
         </script>
     </body>

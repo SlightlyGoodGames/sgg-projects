@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="styles.css" rel="stylesheet">
+        <style>
+            @font-face{
+            font-family:'PixelHomeVideo';
+            src: url("customfonts/pixel-homevideo.ttf");
+            }
+            p,h2,.button{
+                font-family:'PixelHomeVideo'
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+        <h2>Stuff goes here</h2>
+        <p>I do not know why I made this.</p>
+        <button onclick="something()" class="button">Do something</button>
+        <p id="invis" style="display:none;">Well done</p></center>
+        <script>
+            function something(){
+                document.getElementById("invis").style.display = "block";
+            }
+        </script>
+    </body>
+</html>

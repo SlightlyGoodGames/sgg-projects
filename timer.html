@@ -55,6 +55,12 @@
                 } else if (entering && key.keyCode == 13){
                     entering = false;
                     document.getElementById("entertime").style.display = "none";
+                    if (parseInt(currentTime.substring(2,4)) > 59){
+                        currentTime = currentTime.substring(0,2)+"59"+currentTime.substring(4);
+                    }
+                    if (parseInt(currentTime.substring(4)) > 59){
+                        currentTime = currentTime.substring(0,4)+"59"
+                    }
                     timerStart = 3600000*parseInt(currentTime.substring(0,2))+60000*parseInt(currentTime.substring(2,4))+1000*parseInt(currentTime.substring(4,6));
                     startTime = Date.now();
                 } else if (key.keyCode == 32){

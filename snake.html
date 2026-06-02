@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="styles.css" rel="stylesheet">
+        <style>
+            *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+            }
+            html{
+                cursor:none;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="800" height="800"></canvas>
+        <p id="diedmsg"></p>
+        <script>
+            const parameters = new URLSearchParams(document.location.search);
+            const canvas = document.getElementById("canvas");
+            const easel = canvas.getContext("2d");
+            const canvasWidth = 1920;
+            const canvasHeight = 1080;
+            const snakeWidth = 20;
+            const snakeHeight = 20;
+            const speed = 40;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            easel.fillStyle = "black";
+            easel.fillRect(0,0,canvasWidth,canvasHeight);
+            document.onkeydown = handleKeys;
+            let snakeCoords = [[0,0],[10,0],[20,0]]
+            let snakeDir = 2;
+            let newX = 0;
+            let newY = 0;
+            let fruitX = 0;
+            let fruitY = 0;
+            let isDead = false;
+            function handleKeys(key){
+                if(key.keyCode == 37 && snakeDir != 2){ //Left
+                    snakeDir = 0;
+                } else if (key.keyCode == 38 && snakeDir != 3){ //Up
+                    snakeDir = 1;
+                } else if (key.keyCode == 39 && snakeDir != 0){ //Right
+                    snakeDir = 2;
+                } else if (key.keyCode == 40 && snakeDir != 1){ //Down
+                    snakeDir = 3;
+                }
+            }
+            function checkOverflow(){
+                if(newX < 0 || newX >= canvasWidth || newY < 0 || newY >= canvasHeight || snakeCoords.some(coord => coord[0] === newX && coord[1] === newY)){
+                    isDead = true;
+                }
+            }
+            function checkFruit(){
+                if(snakeCoords.some(coord => coord[0] === fruitX && coord[1] === fruitY)){
+                    return true;
+                }
+                return false;
+            }
+            function generateFruit(){
+                insnake = true;
+                while(insnake){
+                    fruitX = Math.round(Math.random()*(canvasWidth-snakeWidth)/snakeWidth)*snakeWidth;
+                    fruitY = Math.round(Math.random()*(canvasHeight-snakeHeight)/snakeHeight)*snakeHeight;
+                    if(snakeCoords.some(coord => coord[0] !== fruitX && coord[1] !== fruitY)){
+                        insnake = false;
+                    }
+                }
+            }
+            function draw(){
+                easel.fillStyle = "black";
+                easel.fillRect(0,0,canvasWidth,canvasHeight);
+                easel.fillStyle = "red";
+                for(let i=0;i<snakeCoords.length;i++){
+                    easel.fillRect(snakeCoords[i][0],snakeCoords[i][1],snakeWidth,snakeHeight)
+                }
+                easel.fillStyle = "green";
+                easel.fillRect(fruitX,fruitY,snakeWidth,snakeHeight);
+            }
+            function move(){
+                newX = snakeCoords[snakeCoords.length-1][0];
+                newY = snakeCoords[snakeCoords.length-1][1];
+                if(snakeDir == 0){
+                    newX -= snakeWidth;
+                } else if(snakeDir == 1){
+                    newY -= snakeHeight;
+                } else if(snakeDir == 2){
+                    newX += snakeWidth;
+                } else if(snakeDir == 3){
+                    newY += snakeHeight;
+                }
+                checkOverflow();
+                snakeCoords.push([newX,newY]);
+            }
+            function cutEnd(){
+                snakeCoords.shift();
+            }
+            async function loop(){
+                while(true){
+                    if(!isDead){
+                        move();
+                        if(checkFruit()){
+                            generateFruit();
+                        } else {
+                            cutEnd();
+                        }
+                        draw();
+                    } else {
+                        document.getElementById("diedmsg").innerHTML = "You died!<br>Score: "+snakeCoords.length;
+                    }
+                    await new Promise(r => setTimeout(r,Math.round(1000/speed)));
+                }
+            }
+            generateFruit();
+            loop();
+        </script>
+    </body>
+</html>

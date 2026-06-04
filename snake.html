@@ -9,7 +9,7 @@
             box-sizing: border-box;
             overflow: hidden;
             }
-            html{
+            canvas{
                 cursor:none;
             }
         </style>
@@ -21,32 +21,50 @@
             const parameters = new URLSearchParams(document.location.search);
             const canvas = document.getElementById("canvas");
             const easel = canvas.getContext("2d");
-            const canvasWidth = 1920;
-            const canvasHeight = 1080;
+            const canvasWidth = 800;
+            const canvasHeight = 800;
             const snakeWidth = 20;
             const snakeHeight = 20;
-            const speed = 40;
+            const speed = 20;
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
             easel.fillStyle = "black";
             easel.fillRect(0,0,canvasWidth,canvasHeight);
             document.onkeydown = handleKeys;
-            let snakeCoords = [[0,0],[10,0],[20,0]]
-            let snakeDir = 2;
-            let newX = 0;
-            let newY = 0;
-            let fruitX = 0;
-            let fruitY = 0;
-            let isDead = false;
+            let snakeCoords;
+            let snakeDir;
+            let newX;
+            let newY;
+            let fruitX;
+            let fruitY;
+            let isDead;
+            let blockKeys;
+            let keyBuffer;
+            function begin(){
+                snakeCoords = [[0,0],[snakeWidth,0],[snakeWidth*2,0]];
+                snakeDir = 2;
+                newX = 0;
+                newY = 0;
+                fruitX = 0;
+                fruitY = 0;
+                isDead = false;
+                blockKeys = false;
+                keyBuffer = [];
+            }
             function handleKeys(key){
-                if(key.keyCode == 37 && snakeDir != 2){ //Left
-                    snakeDir = 0;
-                } else if (key.keyCode == 38 && snakeDir != 3){ //Up
-                    snakeDir = 1;
-                } else if (key.keyCode == 39 && snakeDir != 0){ //Right
-                    snakeDir = 2;
-                } else if (key.keyCode == 40 && snakeDir != 1){ //Down
-                    snakeDir = 3;
+                if(!blockKeys){
+                    if(key.keyCode == 37 && snakeDir != 2){ //Left
+                        snakeDir = 0;
+                    } else if (key.keyCode == 38 && snakeDir != 3){ //Up
+                        snakeDir = 1;
+                    } else if (key.keyCode == 39 && snakeDir != 0){ //Right
+                        snakeDir = 2;
+                    } else if (key.keyCode == 40 && snakeDir != 1){ //Down
+                        snakeDir = 3;
+                    }
+                    blockKeys = true;
+                } else {
+                    keyBuffer.push(key);
                 }
             }
             function checkOverflow(){
@@ -94,6 +112,7 @@
                 }
                 checkOverflow();
                 snakeCoords.push([newX,newY]);
+                blockKeys = false;
             }
             function cutEnd(){
                 snakeCoords.shift();
@@ -102,6 +121,21 @@
                 while(true){
                     if(!isDead){
                         move();
+                        if(!blockKeys && keyBuffer.length > 0){
+                            for(let i=0;i<blockKeys.length;i++){
+                                key = blockKeys[i];
+                                if(key.keyCode == 37 && snakeDir != 2){ //Left
+                                    snakeDir = 0;
+                                } else if (key.keyCode == 38 && snakeDir != 3){ //Up
+                                    snakeDir = 1;
+                                } else if (key.keyCode == 39 && snakeDir != 0){ //Right
+                                    snakeDir = 2;
+                                } else if (key.keyCode == 40 && snakeDir != 1){ //Down
+                                    snakeDir = 3;
+                                }
+                            }
+                            keyBuffer = [];
+                        }
                         if(checkFruit()){
                             generateFruit();
                         } else {
@@ -114,6 +148,7 @@
                     await new Promise(r => setTimeout(r,Math.round(1000/speed)));
                 }
             }
+            begin();
             generateFruit();
             loop();
         </script>

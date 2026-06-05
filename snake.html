@@ -124,18 +124,18 @@
                 for(let i=1;i<snakeCoords.length;i++){
                     easel.fillRect(snakeCoords[i][0],snakeCoords[i][1],snakeWidth,snakeHeight)
                 }
-                if(snakeCoords[0][1] < snakeCoords[1][1]){ //Down
-                    console.log("down");
-                    easel.fillRect(snakeCoords[0][0],snakeCoords[0][1]+smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
+                if(snakeCoords[0][0] > snakeCoords[1][0]){ //Left
+                    console.log("left");
+                    easel.fillRect(snakeCoords[0][0]-smoothFrame*snakeWidth/smoothness,snakeCoords[0][1],snakeWidth,snakeHeight);
                 } else if(snakeCoords[0][1] > snakeCoords[1][1]){ //Up
                     console.log("up");
                     easel.fillRect(snakeCoords[0][0],snakeCoords[0][1]-smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
-                } else if(snakeCoords[0][0] > snakeCoords[1][0]){ //Left
-                    console.log("left");
-                    easel.fillRect(snakeCoords[0][0]-smoothFrame*snakeWidth/smoothness,snakeCoords[0][1],snakeWidth,snakeHeight);
                 } else if(snakeCoords[0][0] < snakeCoords[1][0]){ //Right
                     console.log("right");
                     easel.fillRect(snakeCoords[0][0]+smoothFrame*snakeWidth/smoothness,snakeCoords[0][1],snakeWidth,snakeHeight);
+                } else if(snakeCoords[0][1] < snakeCoords[1][1]){ //Down
+                    console.log("down");
+                    easel.fillRect(snakeCoords[0][0],snakeCoords[0][1]+smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
                 }
                 if(snakeDir == 0){
                     easel.fillRect(snakeCoords[snakeCoords.length-1][0]-smoothFrame*snakeWidth/smoothness,snakeCoords[snakeCoords.length-1][1],snakeWidth,snakeHeight);

@@ -21,11 +21,12 @@
             const parameters = new URLSearchParams(document.location.search);
             const canvas = document.getElementById("canvas");
             const easel = canvas.getContext("2d");
-            const canvasWidth = 800;
-            const canvasHeight = 800;
-            const snakeWidth = 20;
-            const snakeHeight = 20;
-            const speed = 20;
+            const canvasWidth = 1920;
+            const canvasHeight = 1080;
+            const snakeWidth = 40;
+            const snakeHeight = 40;
+            const speed = 30;
+            const smoothness = 4;
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
             easel.fillStyle = "black";
@@ -40,6 +41,7 @@
             let isDead;
             let blockKeys;
             let keyBuffer;
+            let smoothFrame;
             function begin(){
                 snakeCoords = [[0,0],[snakeWidth,0],[snakeWidth*2,0]];
                 snakeDir = 2;
@@ -50,6 +52,7 @@
                 isDead = false;
                 blockKeys = false;
                 keyBuffer = [];
+                smoothFrame = 0;
             }
             function handleKeys(key){
                 if(!blockKeys){
@@ -83,7 +86,7 @@
                 while(insnake){
                     fruitX = Math.round(Math.random()*(canvasWidth-snakeWidth)/snakeWidth)*snakeWidth;
                     fruitY = Math.round(Math.random()*(canvasHeight-snakeHeight)/snakeHeight)*snakeHeight;
-                    if(snakeCoords.some(coord => coord[0] !== fruitX && coord[1] !== fruitY)){
+                    if(!snakeCoords.some(coord => coord[0] === fruitX && coord[1] === fruitY)){
                         insnake = false;
                     }
                 }
@@ -114,38 +117,78 @@
                 snakeCoords.push([newX,newY]);
                 blockKeys = false;
             }
+            function cosmeticDraw(){
+                easel.fillStyle = "black";
+                easel.fillRect(0,0,canvasWidth,canvasHeight);
+                easel.fillStyle = "red";
+                for(let i=1;i<snakeCoords.length;i++){
+                    easel.fillRect(snakeCoords[i][0],snakeCoords[i][1],snakeWidth,snakeHeight)
+                }
+                if(snakeCoords[0][1] < snakeCoords[1][1]){ //Down
+                    console.log("down");
+                    easel.fillRect(snakeCoords[0][0],snakeCoords[0][1]+smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
+                } else if(snakeCoords[0][1] > snakeCoords[1][1]){ //Up
+                    console.log("up");
+                    easel.fillRect(snakeCoords[0][0],snakeCoords[0][1]-smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
+                } else if(snakeCoords[0][0] > snakeCoords[1][0]){ //Left
+                    console.log("left");
+                    easel.fillRect(snakeCoords[0][0]-smoothFrame*snakeWidth/smoothness,snakeCoords[0][1],snakeWidth,snakeHeight);
+                } else if(snakeCoords[0][0] < snakeCoords[1][0]){ //Right
+                    console.log("right");
+                    easel.fillRect(snakeCoords[0][0]+smoothFrame*snakeWidth/smoothness,snakeCoords[0][1],snakeWidth,snakeHeight);
+                }
+                if(snakeDir == 0){
+                    easel.fillRect(snakeCoords[snakeCoords.length-1][0]-smoothFrame*snakeWidth/smoothness,snakeCoords[snakeCoords.length-1][1],snakeWidth,snakeHeight);
+                } else if(snakeDir == 1){
+                    easel.fillRect(snakeCoords[snakeCoords.length-1][0],snakeCoords[snakeCoords.length-1][1]-smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
+                } else if(snakeDir == 2){
+                    easel.fillRect(snakeCoords[snakeCoords.length-1][0]+smoothFrame*snakeWidth/smoothness,snakeCoords[snakeCoords.length-1][1],snakeWidth,snakeHeight);
+                } else if(snakeDir == 3){
+                    easel.fillRect(snakeCoords[snakeCoords.length-1][0],snakeCoords[snakeCoords.length-1][1]+smoothFrame*snakeHeight/smoothness,snakeWidth,snakeHeight);
+                }
+                easel.fillStyle = "green";
+                easel.fillRect(fruitX,fruitY,snakeWidth,snakeHeight);
+            }
             function cutEnd(){
                 snakeCoords.shift();
             }
             async function loop(){
                 while(true){
                     if(!isDead){
-                        move();
-                        if(!blockKeys && keyBuffer.length > 0){
-                            for(let i=0;i<blockKeys.length;i++){
-                                key = blockKeys[i];
-                                if(key.keyCode == 37 && snakeDir != 2){ //Left
-                                    snakeDir = 0;
-                                } else if (key.keyCode == 38 && snakeDir != 3){ //Up
-                                    snakeDir = 1;
-                                } else if (key.keyCode == 39 && snakeDir != 0){ //Right
-                                    snakeDir = 2;
-                                } else if (key.keyCode == 40 && snakeDir != 1){ //Down
-                                    snakeDir = 3;
+                        if(smoothFrame == 0){
+                            move();
+                            if(!blockKeys && keyBuffer.length > 0){
+                                for(let i=0;i<keyBuffer.length;i++){
+                                    key = keyBuffer[i];
+                                    if(key.keyCode == 37 && snakeDir != 2){ //Left
+                                        snakeDir = 0;
+                                    } else if (key.keyCode == 38 && snakeDir != 3){ //Up
+                                        snakeDir = 1;
+                                    } else if (key.keyCode == 39 && snakeDir != 0){ //Right
+                                        snakeDir = 2;
+                                    } else if (key.keyCode == 40 && snakeDir != 1){ //Down
+                                        snakeDir = 3;
+                                    }
                                 }
+                                keyBuffer = [];
                             }
-                            keyBuffer = [];
-                        }
-                        if(checkFruit()){
-                            generateFruit();
+                            if(checkFruit()){
+                                generateFruit();
+                            } else {
+                                cutEnd();
+                            }
+                            draw();
                         } else {
-                            cutEnd();
+                            cosmeticDraw();
                         }
-                        draw();
                     } else {
                         document.getElementById("diedmsg").innerHTML = "You died!<br>Score: "+snakeCoords.length;
                     }
-                    await new Promise(r => setTimeout(r,Math.round(1000/speed)));
+                    await new Promise(r => setTimeout(r,Math.round(1000/speed/smoothness)));
+                    smoothFrame++;
+                    if(smoothFrame >= smoothness){
+                        smoothFrame = 0;
+                    }
                 }
             }
             begin();
